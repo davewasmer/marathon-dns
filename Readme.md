@@ -1,6 +1,6 @@
 # marathon-dns
 
-A standalone component extracted from (marathon)[https://github.com/davewasmer/marathon] for enabling custom DNS for local servers. 
+A standalone component extracted from [marathon](https://github.com/davewasmer/marathon) for enabling custom DNS for local servers. 
 
 # Installation
 
