@@ -1,5 +1,5 @@
 {
-  "projectFile": "/Users/davewasmer/.marathon",
+  "projectFile": "~/.marathon",
   "tld": "dev",
   "proxyPort": 20302,
   "dnsPort": 20301
