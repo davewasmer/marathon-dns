@@ -1,0 +1,22 @@
+{
+  "name": "marathon-dns",
+  "version": "0.1.0",
+  "description": "Change localhost:3000 to myapp.dev",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "sh install.sh",
+    "preuninstall": "sh uninstall.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:davewasmer/marathon-dns.git"
+  },
+  "author": "Dave Wasmer",
+  "license": "MIT",
+  "dependencies": {
+    "connect": "~2.7.7",
+    "dnsserver": "https://github.com/sstephenson/dnsserver.js/tarball/4f2c713b2e",
+    "http-proxy": "~0.10.2",
+    "coffee-script": "~1.6.2"
+  }
+}

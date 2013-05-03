@@ -1,0 +1,6 @@
+{
+  "projectFile": "/Users/davewasmer/.marathon",
+  "tld": "dev",
+  "proxyPort": 20302,
+  "dnsPort": 20301
+}
