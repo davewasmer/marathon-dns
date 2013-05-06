@@ -56,7 +56,7 @@
     nodepath=$npm_config_prefix"/bin/node"
     sed -i '' -e "s#EXEC#$execpath#g" "$HOME/Library/LaunchAgents/davewasmer.marathon.marathond.plist"
     sed -i '' -e "s#NODE#$nodepath#g" "$HOME/Library/LaunchAgents/davewasmer.marathon.marathond.plist"
-    sed -i '' -e "s#LOG#$logs/marathon.log#g" "$HOME/Library/LaunchAgents/davewasmer.marathon.marathond.plist"
+    sed -i '' -e "s#LOG#$modulepath/marathon.log#g" "$HOME/Library/LaunchAgents/davewasmer.marathon.marathond.plist"
     sed -i '' -e "s#WORKINGDIR#$modulepath#g" "$HOME/Library/LaunchAgents/davewasmer.marathon.marathond.plist"
     sed -i '' -e "s#PATHEXPORT#$PATH#g" "$HOME/Library/LaunchAgents/davewasmer.marathon.marathond.plist"
 
