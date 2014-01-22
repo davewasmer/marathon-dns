@@ -1,0 +1,47 @@
+<style>
+  body {
+    font-family: "Helvetica Neue", "Helvetica", sans-serif;
+    font-size: 14px;
+    color: #333;
+    margin: 0;
+    padding: 0;
+  }
+  code {
+    font-family: "Inconsolata", "Monaco", "Courier";
+  }
+  h1 {
+    background-color: #f2411c;
+    font-weight: 800;
+    padding: 75px;
+    color: white;
+    font-size: 60px;
+    text-align: center;
+
+  }
+  .page {
+    width: 400px;
+    margin: 0 auto;
+  }
+  ul {
+    list-style: none;
+  }
+</style>
+
+<h1>Not Found</h1>
+
+<div class="page">
+  <p>
+    No project was found in your <code>.marathon</code> config file that matches
+    that domain name.
+  </p>
+
+  <h3>Available Projects</h3>
+
+  <ul>
+    {{#each projects}}
+    <li>
+      <a title="http://localhost:{{this}}" href="http://{{@key}}.dev/">http://{{@key}}.dev</a>
+    </li>
+    {{/each}}
+  </ul>
+</div>

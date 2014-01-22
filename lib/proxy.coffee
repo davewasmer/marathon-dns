@@ -1,6 +1,7 @@
 config = require '../config'
 fs = require 'fs'
 connect = require 'connect'
+handlebars = require 'handlebars'
 httpProxy = require 'http-proxy'
 routingProxy = new httpProxy.RoutingProxy()
 
@@ -37,7 +38,8 @@ findProject = (host) ->
 # ignore this request (pass it through).
 # 
 proxy = (req, res, next) ->
-  if { name, port } = findProject(req.headers['host'])
+  { name, port } = findProject(req.headers['host'])
+  if name? and port?
     buffer = httpProxy.buffer req
     routingProxy.proxyRequest req, res,
       host: 'localhost'
@@ -46,9 +48,20 @@ proxy = (req, res, next) ->
   else
     next()
 
+# 
+# Display a help page to indicate when a project was not found in the
+# marathon config file.
+# 
+projectNotFound = (req, res, next) ->
+  template = handlebars.compile(fs.readFileSync('lib/project-not-found.hbs', 'utf-8'))
+  res.end(template({projects, req}))
+
 #
 # A simple connect server to handle our proxy
 # 
 app = connect()
- .use(proxy)
- .listen(config.proxyPort)
+
+app.use(proxy)
+app.use(projectNotFound)
+
+app.listen(config.proxyPort)
