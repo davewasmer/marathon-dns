@@ -6,7 +6,7 @@ A standalone component extracted from [marathon](https://github.com/davewasmer/m
 
 _Note: requires >= Mac OS X 10.6_
 
-    npm install marathon -g
+    npm install marathon-dns -g
 
 Once it finishes, open up your project file (`~/.marathon`), and add any projects you'd like. For example, the following project file:
 
