@@ -53,6 +53,7 @@
     # and inject it into the launchctl plists
     modulepath=`pwd`
     execpath=$modulepath"/index.js"
+    logs=$modulepath"/marathon.log"
     nodepath=$npm_config_prefix"/bin/node"
     sed -i '' -e "s#EXEC#$execpath#g" "$HOME/Library/LaunchAgents/davewasmer.marathon.marathond.plist"
     sed -i '' -e "s#NODE#$nodepath#g" "$HOME/Library/LaunchAgents/davewasmer.marathon.marathond.plist"
