@@ -1,6 +1,6 @@
 {
   "name": "marathon-dns",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Change localhost:3000 to myapp.dev",
   "main": "index.js",
   "scripts": {
