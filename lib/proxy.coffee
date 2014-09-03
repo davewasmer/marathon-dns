@@ -20,7 +20,7 @@ reloadRules = ->
   for rule in rules
     # Just a port or host
     if rule.target.indexOf(':') is -1
-      if isNan(parseInt(rule.target))
+      if isNaN(parseInt(rule.target))
         rule.host = rule.target
         rule.port = 80
       else
@@ -36,7 +36,7 @@ proxy = (req, res, next) ->
   requestedHost = req.headers['host']
 
   # Match tld
-  if requestedHost.match(///.#{tld}$///)
+  if requestedHost.match(///.#{config.tld}$///)
 
     # Find matching rule
     for rule in rules
