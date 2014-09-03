@@ -1,67 +1,61 @@
-config = require '../config'
-fs = require 'fs'
-connect = require 'connect'
-handlebars = require 'handlebars'
-httpProxy = require 'http-proxy'
+config = require('../config')
+fs = require('fs')
+connect = require('connect')
+wildcard = require('wildcard')
+handlebars = require('handlebars')
+httpProxy = require('http-proxy')
 routingProxy = new httpProxy.RoutingProxy()
 
+rules = []
+if not fs.existsSync(config.rulesFile)
+  fs.writeFileSync(config.rulesFile, "{}")
 
-#
-# The domain name -> server mappings are stored in ~/.marathon in JSON
-# format. These *projects* consist of a `domain`: `port` mapping, where
-# the domain is the URL to be captured, and the port is the port of the
-# server running on localhost that should handle the incoming request.
-#
-if not fs.existsSync config.projectFile
-  fs.writeFileSync config.projectFile, "{}"
-projects = JSON.parse fs.readFileSync config.projectFile, 'utf-8'
+reloadRules = ->
+  console.log('Reloading rule configuration')
+  try
+    rules = JSON.parse(fs.readFileSync(config.rulesFile, 'utf-8'))
+  catch e
+    console.error("Unable to parse rules file (#{config.rulesFile})")
+  # Parse targets into host + port
+  for rule in rules
+    # Just a port or host
+    if rule.target.indexOf(':') is -1
+      if isNan(parseInt(rule.target))
+        rule.host = rule.target
+        rule.port = 80
+      else
+        rule.host = 'localhost'
+        rule.port = parseInt(rule.target)
+    else
+      [ rule.host, rule.port ] = rule.target.split(':')
 
-# 
-# Automatically reload the project file whenever it changes.
-# 
-fs.watch config.projectFile, ->
-  console.log "regenerating project list"
-  projects = JSON.parse fs.readFileSync config.projectFile, 'utf-8'
+reloadRules()
+fs.watch(config.rulesFile, reloadRules)
 
-#
-# Take a host value, and extract the domain given our TLD configuration.
-# If no match is found for this domain, return false.
-# 
-findProject = (host) ->
-  tld = config.tld
-  match = host.match(new RegExp("^(.+)\.#{tld}"))
-  if match? then { name: match[1], port: projects[match[1]] } else false
-
-# 
-# Take an inbound request, determine if there is a matching project for
-# this domain. If so, proxy the request through to that server. If not,
-# ignore this request (pass it through).
-# 
 proxy = (req, res, next) ->
-  { name, port } = findProject(req.headers['host'])
-  if name? and port?
-    buffer = httpProxy.buffer req
-    routingProxy.proxyRequest req, res,
-      host: 'localhost'
-      port: port
-      buffer: buffer
-  else
+  requestedHost = req.headers['host']
+
+  # Match tld
+  if requestedHost.match(///.#{tld}$///)
+
+    # Find matching rule
+    for rule in rules
+      if wildcard(rule.pattern, requestedHost)
+        return routingProxy.proxyRequest req, res,
+          host: rule.host
+          port: rule.port
+          buffer: httpProxy.buffer(req)
+
+    # Fallback to our help page
     next()
 
-# 
-# Display a help page to indicate when a project was not found in the
-# marathon config file.
-# 
-projectNotFound = (req, res, next) ->
-  template = handlebars.compile(fs.readFileSync('lib/project-not-found.hbs', 'utf-8'))
-  res.end(template({projects, req}))
+# A help page to indicate when a domain was not found in the marathon config file
+notFoundTemplate = handlebars.compile(fs.readFileSync('lib/project-not-found.hbs', 'utf-8'))
+domainNotFound = (req, res, next) ->
+  res.end(notFoundTemplate({rules, req}))
 
-#
-# A simple connect server to handle our proxy
-# 
-app = connect()
-
-app.use(proxy)
-app.use(projectNotFound)
-
-app.listen(config.proxyPort)
+# A simple connect server to handle our proxy and help page
+connect()
+.use(proxy)
+.use(domainNotFound)
+.listen(config.proxyPort)

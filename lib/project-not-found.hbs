@@ -31,17 +31,17 @@
 
 <div class="page">
   <p>
-    No project was found in your <code>.marathon</code> config file that matches
+    No rule was found in your <code>.marathon</code> config file that matches
     that domain name.
   </p>
 
   <h3>Available Projects</h3>
 
   <ul>
-    {{#each projects}}
-    <li>
-      <a title="http://localhost:{{this}}" href="http://{{@key}}.dev/">http://{{@key}}.dev</a>
-    </li>
+    {{#each rule in rules}}
+      <li>
+        <a href="http://{{rule.host}}.{{config.tld}}:{{rule.port}}">http://{{rule.host}}.{{config.tld}}:{{rule.port}}</a>
+      </li>
     {{/each}}
   </ul>
 </div>

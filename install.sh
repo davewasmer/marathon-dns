@@ -27,7 +27,7 @@
 
     echo ""
     echo "*** Expanding configuration paths ..."
-    sed -i '' -e "s#~#$HOME#g" ./config.json
+    sed "s#~#$HOME#g" ./installation/config.json > ./config.json
 
 
 # Install the various plists and config files

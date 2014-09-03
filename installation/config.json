@@ -1,5 +1,5 @@
 {
-  "rulesFile": "/Users/daw/.marathon",
+  "rulesFile": "~/.marathon",
   "tld": "dev",
   "proxyPort": 20302,
   "dnsPort": 20301

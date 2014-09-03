@@ -14,10 +14,11 @@
   "author": "Dave Wasmer",
   "license": "MIT",
   "dependencies": {
+    "coffee-script": "~1.6.2",
     "connect": "~2.7.7",
     "dnsserver": "https://github.com/sstephenson/dnsserver.js/tarball/4f2c713b2e",
+    "handlebars": "~1.3.0",
     "http-proxy": "~0.10.2",
-    "coffee-script": "~1.6.2",
-    "handlebars": "~1.3.0"
+    "wildcard": "^0.1.5"
   }
 }
